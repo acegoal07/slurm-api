@@ -36,7 +36,7 @@ export default new OpenAPIHono().openapi(
    async (c) => {
       const body = c.req.valid('json');
 
-      await ensureFlavourExists(body.flavour);
+      const flavour = await ensureFlavourExists(body.flavour);
 
       // Read the flavour file
       const script = readFileSync(path.join(env.FLAVOURS_PATH, body.flavour), 'utf8');
@@ -45,13 +45,14 @@ export default new OpenAPIHono().openapi(
 
       const response = await slurmFetch('post', 'job/submit', {
          job: {
-            current_working_directory: '/users/clusteruser',
-            environment: [
-               'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-               'HOME=/users/clusteruser',
-               'USER=clusteruser',
-               'SHELL=/bin/bash'
-            ]
+            name: `${env.VEM2_NAME_PREFIX}.${flavour.name}`,
+            tasks: 1,
+            cpus_per_task: flavour.cpus,
+            memory_per_node: {
+               set: true,
+               number: flavour.memoryGb
+            },
+            current_working_directory: '/users/clusteruser'
          },
          script
       });
