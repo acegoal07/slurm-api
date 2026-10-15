@@ -34,11 +34,7 @@ export default new OpenAPIHono().openapi(
       const { id } = c.req.valid('param');
 
       const job =
-         (
-            await slurmFetch('get', `job/${id}/?flags=DETAIL`).then((res) =>
-               res.json()
-            )
-         ).jobs ?? [];
+         (await slurmFetch('get', `job/${id}/?flags=DETAIL`).then((res) => res.json())).jobs ?? [];
 
       return c.json(
          job.map((job) => ({
