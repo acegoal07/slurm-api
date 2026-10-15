@@ -31,7 +31,7 @@ export default new OpenAPIHono().openapi(
          res.json()
       );
 
-      console.log(test);
+      console.log(test.status);
 
       return c.body(null, 204);
    }
