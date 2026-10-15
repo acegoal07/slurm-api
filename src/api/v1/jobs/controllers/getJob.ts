@@ -6,7 +6,7 @@ import { JobReturnSchema } from '../lib/schemas';
 
 export default new OpenAPIHono().openapi(
    createRoute({
-      method: 'delete',
+      method: 'get',
       path: '/',
       description: `Get's a specific job using it's ID`,
       tags: ['vem2'],
