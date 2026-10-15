@@ -37,7 +37,11 @@ export default new OpenAPIHono().openapi(
          res.json()
       );
 
-      console.log(response);
+      const state = await slurmFetch('get', `/slurm/v0.0.45/jobs/state/?job_id=${id}`).then((res) =>
+         res.json()
+      );
+
+      console.log(state);
 
       return c.json(
          (response.jobs ?? []).map((job) => ({
