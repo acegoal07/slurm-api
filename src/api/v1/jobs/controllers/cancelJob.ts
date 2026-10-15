@@ -5,7 +5,7 @@ import { slurmFetch } from '../../../../lib/slurmSocket';
 
 export default new OpenAPIHono().openapi(
    createRoute({
-      method: 'get',
+      method: 'delete',
       path: '/',
       description: `Cancels a job using it's ID`,
       tags: ['vem2'],
@@ -27,9 +27,11 @@ export default new OpenAPIHono().openapi(
    async (c) => {
       const { id } = c.req.valid('param');
 
-      await slurmFetch('delete', `/slurm/v0.0.45/job/${id}`).then((res) =>
+      const test = await slurmFetch('delete', `/slurm/v0.0.45/job/${id}`).then((res) =>
          res.json()
       );
+
+      console.log(test);
 
       return c.body(null, 204);
    }
