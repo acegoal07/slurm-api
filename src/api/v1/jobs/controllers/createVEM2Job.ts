@@ -45,12 +45,16 @@ export default new OpenAPIHono().openapi(
 
       const response = await slurmFetch('post', 'job/submit', {
          body: JSON.stringify({
-            job: {},
             script
          })
       });
 
       console.log(response);
+
+      const result = await response.json();
+
+      console.log('Status:', response.status);
+      console.log('Errors:', JSON.stringify(result, null, 2));
 
       return c.body(null, 204);
    }
