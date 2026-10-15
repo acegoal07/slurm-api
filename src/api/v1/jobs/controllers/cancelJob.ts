@@ -27,9 +27,7 @@ export default new OpenAPIHono().openapi(
    async (c) => {
       const { id } = c.req.valid('param');
 
-      const test = await slurmFetch('delete', `/slurm/v0.0.45/job/${id}`).then((res) =>
-         res.json()
-      );
+      const test = await slurmFetch('delete', `/slurm/v0.0.45/job/${id}`).then((res) => res.json());
 
       console.log(test.status);
 
