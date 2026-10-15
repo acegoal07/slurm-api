@@ -24,7 +24,7 @@ export default new OpenAPIHono().openapi(
    }),
    async (c) => {
       const jobs =
-         (await slurmFetch('get', '/slurm/v0.0.45/jobs/?flags=DETAIL').then((res) => res.json()))
+         (await slurmFetch('get', 'jobs/?flags=DETAIL').then((res) => res.json()))
             .jobs ?? [];
 
       return c.json(

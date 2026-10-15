@@ -10,7 +10,7 @@ import { env } from './env';
  * @returns The response
  */
 export async function slurmFetch(method: string, path: string, data?: object): Promise<Response> {
-   return await fetch(`http://localhost${path}`, {
+   return await fetch(`http://localhost/slurm/${env.SLURM_API_VERSION}/${path}`, {
       method,
       dispatcher: new Agent({
          connect: {
