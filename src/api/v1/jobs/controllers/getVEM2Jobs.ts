@@ -26,7 +26,11 @@ export default new OpenAPIHono().openapi(
    async (c) => {
       const jobs = (
          (await slurmFetch('get', 'jobs/?flags=DETAIL').then((res) => res.json())).jobs ?? []
-      ).filter((job) => job.name.startsWith(env.VEM2_NAME_PREFIX));
+      ).filter(
+         (job) =>
+            job.job_state.some((state) => ['RUNNING', 'PENDING'].includes(state)) &&
+            job.name.startsWith(env.VEM2_NAME_PREFIX)
+      );
 
       return c.json(
          (jobs ?? []).map((job) => ({
