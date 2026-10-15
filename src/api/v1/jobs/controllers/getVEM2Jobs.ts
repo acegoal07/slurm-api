@@ -37,6 +37,8 @@ export default new OpenAPIHono().openapi(
             const [hostname, ...parts] = job.name.split('.');
             const flavour = parts.join('.');
 
+            console.log(job)
+
             return {
                id: job.job_id,
                name: job.name,
