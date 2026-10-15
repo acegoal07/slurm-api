@@ -28,7 +28,7 @@ export default new OpenAPIHono().openapi(
          (await slurmFetch('get', 'jobs/?flags=DETAIL').then((res) => res.json()))
             .jobs ?? []
       )
-         .filter((job) => job.partition === env.VEM2_PARTITION);
+         .filter((job) => job.name.startsWith(env.VEM2_NAME_PREFIX));
 
       return c.json(
          (jobs ?? []).map((job) => ({
