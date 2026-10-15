@@ -33,25 +33,20 @@ export default new OpenAPIHono().openapi(
    async (c) => {
       const { id } = c.req.valid('param');
 
-      const response = await slurmFetch('get', `/slurm/v0.0.45/job/${id}/?flags=DETAIL`).then((res) =>
-         res.json()
-      );
-
-      console.log(response);
-
-      const state = (
-         (await slurmFetch('get', `/slurm/v0.0.45/jobs/state/?job_id=${id}`).then((res) =>
-            res.json()
-         )) ?? []
-      ).jobs[0];
+      const job =
+         (
+            await slurmFetch('get', `/slurm/v0.0.45/job/${id}/?flags=DETAIL`).then((res) =>
+               res.json()
+            )
+         ).jobs ?? [];
 
       return c.json(
-         (response.jobs ?? []).map((job) => ({
+         job.map((job) => ({
             id: job.job_id,
             name: job.name,
             partition: job.partition,
             account: job.account,
-            state: state.state
+            state: job.job_state
          })),
          200
       );
