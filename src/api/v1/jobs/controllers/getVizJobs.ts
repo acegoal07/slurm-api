@@ -8,7 +8,7 @@ export default new OpenAPIHono().openapi(
    createRoute({
       method: 'get',
       path: '/',
-      description: 'Gets all the current viz jobs',
+      description: `Get's all the current viz jobs`,
       tags: ['vem2'],
       responses: {
          200: {

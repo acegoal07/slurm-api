@@ -6,9 +6,9 @@ import { JobReturnSchema } from '../lib/schemas';
 
 export default new OpenAPIHono().openapi(
    createRoute({
-      method: 'get',
+      method: 'delete',
       path: '/',
-      description: 'Gets all the current jobs',
+      description: `Get's a specific job using it's ID`,
       tags: ['vem2'],
       request: {
          params: z.object({
@@ -20,7 +20,7 @@ export default new OpenAPIHono().openapi(
       },
       responses: {
          200: {
-            description: 'Retrieved all the current jobs successfully',
+            description: 'Retrieved the specific job successfully',
             content: {
                'application/json': {
                   schema: JobReturnSchema
@@ -33,9 +33,9 @@ export default new OpenAPIHono().openapi(
    async (c) => {
       const { id } = c.req.valid('param');
 
-      const response = await slurmFetch('get', `/slurm/v0.0.45/job/${id}`).then((res) => res.json());
-
-      console.log(response);
+      const response = await slurmFetch('get', `/slurm/v0.0.45/job/${id}`).then((res) =>
+         res.json()
+      );
 
       return c.json(
          (response.jobs ?? []).map((job) => ({
