@@ -52,7 +52,10 @@ export default new OpenAPIHono().openapi(
                set: true,
                number: flavour.memoryGb
             },
-            current_working_directory: '/users/clusteruser'
+            current_working_directory: '/users/clusteruser',
+            environment: [
+               'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+            ]
          },
          script
       });
