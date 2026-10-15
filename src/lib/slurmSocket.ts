@@ -18,13 +18,9 @@ export async function slurmFetch(method: string, path: string, data?: object): P
          }
       }),
       headers: {
-         Accept: "application/json",
-         ...(data !== undefined
-            ? { "Content-Type": "application/json" }
-            : {}),
+         Accept: 'application/json',
+         ...(data !== undefined ? { 'Content-Type': 'application/json' } : {})
       },
-      ...(data !== undefined
-         ? { body: JSON.stringify(data) }
-         : {}),
-   })
-};
+      ...(data !== undefined ? { body: JSON.stringify(data) } : {})
+   });
+}

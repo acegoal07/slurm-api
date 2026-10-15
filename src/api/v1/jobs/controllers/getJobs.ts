@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 
 import { InternalServerErrorSchema } from '../../../../lib/errors/schemas';
 import { slurmFetch } from '../../../../lib/slurmSocket';
+import { JobReturnSchema } from '../lib/schemas';
 
 export default new OpenAPIHono().openapi(
    createRoute({
@@ -10,17 +11,28 @@ export default new OpenAPIHono().openapi(
       description: 'Gets all the current jobs',
       tags: ['vem2'],
       responses: {
-         204: {
-            description: 'Retrieved all the current jobs successfully'
+         200: {
+            description: 'Retrieved all the current jobs successfully',
+            content: {
+               'application/json': {
+                  schema: JobReturnSchema
+               }
+            }
          },
          ...InternalServerErrorSchema
       }
    }),
    async (c) => {
-      await slurmFetch('get', '/slurm/v0.0.45/jobs/').then((res) => res.json()).then((data) => {
-         console.log(data)
-      })
+      const response = await slurmFetch('get', '/slurm/v0.0.45/jobs/').then((res) => res.json());
 
-      return c.body(null, 204);
+      return c.json(
+         (response.job ?? []).map((job) => ({
+            id: job.job_id,
+            name: job.name,
+            partition: job.partition,
+            account: job.account
+         })),
+         200
+      );
    }
 );
