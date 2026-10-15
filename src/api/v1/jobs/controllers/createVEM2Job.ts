@@ -44,7 +44,9 @@ export default new OpenAPIHono().openapi(
       console.log(script);
 
       const response = await slurmFetch('post', 'job/submit', {
-         job: {},
+         job: {
+            current_working_directory: '/users/clusteruser'
+         },
          script
       });
 
