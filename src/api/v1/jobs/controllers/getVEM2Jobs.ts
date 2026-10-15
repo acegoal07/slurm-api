@@ -37,8 +37,6 @@ export default new OpenAPIHono().openapi(
             const [hostname, ...parts] = job.name.split('.');
             const flavour = parts.join('.');
 
-            console.log(job)
-
             return {
                id: job.job_id,
                name: job.name,
@@ -46,7 +44,7 @@ export default new OpenAPIHono().openapi(
                account: job.account,
                hostname: job.job_state === 'PENDING' ? null : hostname,
                flavour,
-               runtime: job.time?.elapsed ?? 0,
+               runtime: Math.max(0, Math.floor(Date.now() / 1000) - job.start_time.number),
                states: job.job_state
             };
          }),
