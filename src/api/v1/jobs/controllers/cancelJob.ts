@@ -1,6 +1,8 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
-import { InternalServerErrorSchema } from '../../../../lib/errors/schemas';
+import { env } from '../../../../lib/env';
+import APIError, { APIErrorCode } from '../../../../lib/errors/apiError';
+import { InternalServerErrorSchema, NotFoundErrorSchema } from '../../../../lib/errors/schemas';
 import { slurmFetch } from '../../../../lib/slurmSocket';
 
 export default new OpenAPIHono().openapi(
@@ -21,15 +23,28 @@ export default new OpenAPIHono().openapi(
          204: {
             description: 'Successfully canceled the job'
          },
+         ...NotFoundErrorSchema,
          ...InternalServerErrorSchema
       }
    }),
    async (c) => {
       const { id } = c.req.valid('param');
 
-      const test = await slurmFetch('delete', `job/${id}`).then((res) => res.json());
+      const job = (
+         (await slurmFetch('get', `job/${id}/?flags=DETAIL`).then((res) => res.json())).jobs ?? []
+      ).filter(
+         (job) =>
+            job.job_state.some((state) => ['RUNNING', 'PENDING'].includes(state)) &&
+            job.name.startsWith(env.VEM2_NAME_PREFIX)
+      );
 
-      console.log(test.status);
+      if (job.length === 0) {
+         throw new APIError(APIErrorCode.NotFound, {
+            error: 'No VEM2 job was found with that ID'
+         });
+      }
+
+      await slurmFetch('delete', `job/${id}`).then((res) => res.json());
 
       return c.body(null, 204);
    }

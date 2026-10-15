@@ -33,13 +33,20 @@ export default new OpenAPIHono().openapi(
       );
 
       return c.json(
-         (jobs ?? []).map((job) => ({
-            id: job.job_id,
-            name: job.name,
-            partition: job.partition,
-            account: job.account,
-            state: job.job_state
-         })),
+         jobs.map((job) => {
+            const [hostname, ...parts] = job.name.split('.');
+            const flavour = parts.join('.');
+
+            return {
+               id: job.job_id,
+               name: job.name,
+               partition: job.partition,
+               account: job.account,
+               hostname: job.job_state === 'PENDING' ? null : hostname,
+               flavour,
+               states: job.job_state
+            };
+         }),
          200
       );
    }
