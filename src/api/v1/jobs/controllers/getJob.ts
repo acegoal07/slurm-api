@@ -37,6 +37,8 @@ export default new OpenAPIHono().openapi(
          res.json()
       );
 
+      console.log(response);
+
       return c.json(
          (response.jobs ?? []).map((job) => ({
             id: job.job_id,
