@@ -44,6 +44,7 @@ export default new OpenAPIHono().openapi(
                account: job.account,
                hostname: job.job_state === 'PENDING' ? null : hostname,
                flavour,
+               runtime: job.time?.elapsed ?? 0,
                states: job.job_state
             };
          }),

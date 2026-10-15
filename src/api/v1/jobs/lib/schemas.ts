@@ -10,5 +10,6 @@ export const JobReturnSchema = z.object({
    account: z.string(),
    hostname: z.string().nullable(),
    flavour: z.string(),
+   runtime: z.number(),
    states: z.string()
 });
