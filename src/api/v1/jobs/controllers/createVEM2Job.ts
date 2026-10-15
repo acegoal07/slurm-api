@@ -45,7 +45,13 @@ export default new OpenAPIHono().openapi(
 
       const response = await slurmFetch('post', 'job/submit', {
          job: {
-            environment: ['PATH=/usr/local/bin:/usr/bin:/bin']
+            current_working_directory: '/users/clusteruser',
+            environment: [
+               'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+               'HOME=/users/clusteruser',
+               'USER=clusteruser',
+               'SHELL=/bin/bash'
+            ]
          },
          script
       });
