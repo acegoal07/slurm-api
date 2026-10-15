@@ -41,6 +41,8 @@ export default new OpenAPIHono().openapi(
       // Read the flavour file
       const script = readFileSync(path.join(env.FLAVOURS_PATH, body.flavour), 'utf8');
 
+      console.log(script);
+
       const response = await slurmFetch('post', 'job/submit', {
          body: JSON.stringify({
             job: {},
