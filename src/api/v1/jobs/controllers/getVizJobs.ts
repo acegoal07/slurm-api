@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 
+import { env } from '../../../../lib/env';
 import { InternalServerErrorSchema } from '../../../../lib/errors/schemas';
 import { slurmFetch } from '../../../../lib/slurmSocket';
 import { JobReturnSchema } from '../lib/schemas';
@@ -25,7 +26,7 @@ export default new OpenAPIHono().openapi(
    async (c) => {
       const jobs = (
          (await slurmFetch('get', '/slurm/v0.0.45/jobs/').then((res) => res.json())).jobs ?? []
-      ).filter((job) => job.partition === 'debug');
+      ).filter((job) => job.partition === env.VEM2_PARTITION);
 
       return c.json(
          (jobs ?? []).map((job) => ({
