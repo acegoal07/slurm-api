@@ -7,5 +7,6 @@ export const JobReturnSchema = z.object({
    id: z.int(),
    name: z.string(),
    partition: z.string(),
-   account: z.string()
+   account: z.string(),
+   state: z.string()
 });

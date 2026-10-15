@@ -42,7 +42,8 @@ export default new OpenAPIHono().openapi(
             id: job.job_id,
             name: job.name,
             partition: job.partition,
-            account: job.account
+            account: job.account,
+            state: job.state
          })),
          200
       );
